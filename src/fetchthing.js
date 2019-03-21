@@ -33,4 +33,11 @@ class ThingFetcher {
             body: JSON.stringify(quote)
         }).then(resp=>callback(resp))
     }
+
+    static deleteQuote(id,callback){
+        fetch(`${quotesURL}/${id}`,{
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"}
+        }).then((resp)=>callback(resp))
+    }
 }

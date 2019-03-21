@@ -37,6 +37,14 @@ class SageWisdom {
         }) 
     }
 
+    handleDelete(event){
+        const button = event.target
+
+        ThingFetcher.deleteQuote(button.dataset.id, (resp)=>{
+            button.parentNode.parentNode.remove()
+        })
+        }
+
     newQuote(quote,author){
         return {
             "quote": quote,
@@ -70,6 +78,7 @@ class SageWisdom {
 
         liBody.delBtn.innerText = "Delete"
         liBody.delBtn.className = "btn-danger"
+        liBody.delBtn.dataset.id = id
         for(let elem in liBody){
             blockQuote.appendChild(liBody[elem])
         }
