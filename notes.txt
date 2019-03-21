@@ -1,0 +1,19 @@
+
+-submiting the form creates new quote
+--adds it to the list
+-delete button removes quote and updates db
+-like button updates like counter
+-optionall add edit button to each quote
+-optionally sort the quotes
+-quotes use this structure
+ <li class='quote-card'>
+    <blockquote class="blockquote">
+      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+      <footer class="blockquote-footer">Someone famous</footer>
+      <br>
+      <button class='btn-success'>Likes: <span>0</span></button>
+      <button class='btn-danger'>Delete</button>
+    </blockquote>
+  </li>
+
+  
