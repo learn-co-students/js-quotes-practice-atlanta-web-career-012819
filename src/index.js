@@ -15,9 +15,6 @@ function updateQuote(data) {
   const id = data.id
   delete data.id
 
-  console.log("Data: ", data)
-  console.log("ID: ", id)
-
   return fetch(`${QUOTES_URL}/${id}`, {
     method: "PATCH",
     headers: {
@@ -36,7 +33,7 @@ function renderAllQuotes() {
 }
 
 function renderQuote(data) {
-  console.log(data)
+  // console.log(data)
   const container = document.getElementById('quote-list');
 
   const item = document.createElement('li');
@@ -77,10 +74,9 @@ function renderQuote(data) {
 function handleLikes(e) {
   // console.log(e.target)
   // console.log(e.target.querySelector('span').innerText)
-  let likes = parseInt(e.target.querySelector('span').innerText)
-  // console.log("Likes currently: ",likes)
+  const likesElement = e.target.querySelector('span')
+  let likes = parseInt(likesElement.innerText)
   likes++;
-  // console.log("Likes after incrementing: ", likes)
 
   const data = {
     id: e.target.dataset.id,
@@ -88,7 +84,9 @@ function handleLikes(e) {
   }
 
   updateQuote(data)
-  .then(renderAllQuotes)
+  .then(() => {
+    likesElement.innerText = likes
+  })
 }
 
 function handleDelete(e) {
