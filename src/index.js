@@ -30,6 +30,14 @@ function updateQuote(data) {
 
 function postQuote(data) {
   console.log(data)
+  return fetch(QUOTES_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
 }
 
 function deleteQuote(id) {
