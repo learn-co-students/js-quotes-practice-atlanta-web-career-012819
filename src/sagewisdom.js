@@ -43,7 +43,7 @@ class SageWisdom {
         ThingFetcher.deleteQuote(button.dataset.id, (resp)=>{
             button.parentNode.parentNode.remove()
         })
-        }
+    }
 
     newQuote(quote,author){
         return {
@@ -51,6 +51,14 @@ class SageWisdom {
             "likes": 0,
             "author": author
             }
+    }
+
+    handleEdit(event){
+        const {button} = event
+        const {id} = button
+
+        
+
     }
     
     newQuoteCard({author,id,likes,quote}){
@@ -65,12 +73,15 @@ class SageWisdom {
             foot : document.createElement("footer"),
             br : document.createElement("br"),
             likeBtn: document.createElement("button"),
-            delBtn: document.createElement("button")
+            delBtn: document.createElement("button"),
+            editBtn: document.createElement("button")
         }
         liBody.p.innerHTML = quote
         liBody.p.className = "mb-0"
+
         liBody.foot.innerHTML = author
         liBody.foot.className = "blockquote-footer"
+
         liBody.likeBtn.innerText = `Likes: ${likes}`
         liBody.likeBtn.className = "btn-success"
         liBody.likeBtn.dataset.id = id
@@ -79,12 +90,40 @@ class SageWisdom {
         liBody.delBtn.innerText = "Delete"
         liBody.delBtn.className = "btn-danger"
         liBody.delBtn.dataset.id = id
+
+        liBody.editBtn.innerText = "Edit"
+
+        //Add evertying to the blockquote
         for(let elem in liBody){
             blockQuote.appendChild(liBody[elem])
         }
         liBody.likeBtn.addEventListener("click",(e)=>this.handleLike(e))
         liBody.delBtn.addEventListener("click",(e)=>this.handleDelete(e))
+        liBody.editBtn.addEventListener("click",(e)=>this.handleEdit(e))
         return li
+    }
+
+    newEditForm(){
+        const form = document.createElement("form")
+        //Start the form as hidden
+        form.hidden = true
+        const formBody = {
+            quote: document.createElement("input"),
+            author: document.createElement("input"),
+            submit: document.createElement("button")
+        }
+        formBody.quote.name = "quote"
+        formBody.quote.type = "text"
+
+        formBody.author.name = "author"
+        formBody.author.type = "text"
+
+        formBody.submit.type = "submit"
+        formBody.submit.innerHTML = "Save"
+
+        for(elem in formBody){
+            form.appendChild(formBody[elem])
+        }
     }
 }
 
