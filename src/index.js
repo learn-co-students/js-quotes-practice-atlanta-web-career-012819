@@ -25,6 +25,12 @@ function updateQuote(data) {
   })
 }
 
+function deleteQuote(id) {
+  return fetch(`${QUOTES_URL}/${id}`, {
+    method: "DELETE",
+  })
+}
+
 function renderAllQuotes() {
   document.getElementById('quote-list').innerHTML = '';
 
@@ -90,5 +96,9 @@ function handleLikes(e) {
 }
 
 function handleDelete(e) {
-  console.log(e.target);
+  // console.log(e.target.dataset.id);
+  const id = e.target.dataset.id;
+
+  deleteQuote(id)
+  .then(renderAllQuotes)
 }
