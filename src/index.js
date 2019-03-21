@@ -85,12 +85,19 @@ function renderQuote(data) {
   likesButton.addEventListener('click', handleLikes)
   blockquote.appendChild(likesButton);
 
+
   const deleteButton = document.createElement('button');
   deleteButton.className = 'btn-danger';
   deleteButton.dataset.id = data.id;
   deleteButton.innerText = "Delete";
   deleteButton.addEventListener('click', handleDelete)
   blockquote.appendChild(deleteButton);
+
+  const editButton = document.createElement('button');
+  editButton.dataset.id = data.id;
+  editButton.innerText = "Edit";
+  editButton.addEventListener('click', handleEdit)
+  blockquote.appendChild(editButton);
 }
 
 function handleLikes(e) {
@@ -133,4 +140,36 @@ function handleFormSubmit(e) {
 
   postQuote(data)
   .then(renderQuote)
+}
+
+function handleEdit(e) {
+  // console.log(e.target.parentNode.parentNode)
+  const container = e.target.parentNode.parentNode;
+  const editForm = document.createElement('form');
+  // console.log(container.querySelector('p').innerText)
+
+  editForm.innerHTML = `
+  <div class="form-group">
+  <label for="new-quote">New Quote</label>
+  <input type="text" class="form-control" id="new-quote" value="${container.querySelector('p').innerText}">
+  </div>
+  <div class="form-group">
+  <label for="Author">Author</label>
+  <input type="text" class="form-control" id="author" value="${container.querySelector('footer').innerText}">
+  </div>`
+
+  const submitButton = document.createElement('button');
+  submitButton.setAttribute('type', 'submit');
+  submitButton.innerText = "Update Quote";
+  submitButton.classList = "btn btn-primary"
+  submitButton.addEventListener('submit', handleEditSubmit)
+  editForm.appendChild(submitButton);
+
+  container.appendChild(editForm);
+}
+
+function handleEditSubmit(e) {
+  e.preventDefault();
+
+  console.log(e.target)
 }
