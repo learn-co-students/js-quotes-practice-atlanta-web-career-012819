@@ -11,6 +11,23 @@ function getAllQuotes() {
   return fetch(QUOTES_URL).then(response => response.json())
 }
 
+function updateQuote(data) {
+  const id = data.id
+  delete data.id
+
+  console.log("Data: ", data)
+  console.log("ID: ", id)
+
+  return fetch(`${QUOTES_URL}/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+}
+
 function renderAllQuotes() {
   document.getElementById('quote-list').innerHTML = '';
 
@@ -58,7 +75,20 @@ function renderQuote(data) {
 }
 
 function handleLikes(e) {
-  console.log(e.target)
+  // console.log(e.target)
+  // console.log(e.target.querySelector('span').innerText)
+  let likes = parseInt(e.target.querySelector('span').innerText)
+  // console.log("Likes currently: ",likes)
+  likes++;
+  // console.log("Likes after incrementing: ", likes)
+
+  const data = {
+    id: e.target.dataset.id,
+    likes: likes
+  }
+
+  updateQuote(data)
+  .then(renderAllQuotes)
 }
 
 function handleDelete(e) {
