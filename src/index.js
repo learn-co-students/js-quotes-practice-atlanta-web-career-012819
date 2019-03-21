@@ -5,6 +5,9 @@ const QUOTES_URL = "http://localhost:3000/quotes"
 document.addEventListener("DOMContentLoaded", () => {
   // console.log("load successful")
   renderAllQuotes();
+
+  const form = document.getElementById('new-quote-form');
+  form.addEventListener('submit', handleFormSubmit)
 })
 
 function getAllQuotes() {
@@ -25,11 +28,16 @@ function updateQuote(data) {
   })
 }
 
+function postQuote(data) {
+  console.log(data)
+}
+
 function deleteQuote(id) {
   return fetch(`${QUOTES_URL}/${id}`, {
     method: "DELETE",
   })
 }
+
 
 function renderAllQuotes() {
   document.getElementById('quote-list').innerHTML = '';
@@ -101,4 +109,20 @@ function handleDelete(e) {
 
   deleteQuote(id)
   .then(renderAllQuotes)
+}
+
+function handleFormSubmit(e) {
+  e.preventDefault();
+
+  // console.log(e.target.querySelector('#new-quote').value)
+  // console.log(e.target.querySelector('#author').value)
+
+  const data = {
+    quote: e.target.querySelector('#new-quote').value,
+    author: e.target.querySelector('#author').value,
+    likes: 0
+  }
+
+  postQuote(data)
+  .then(renderQuote)
 }
