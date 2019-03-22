@@ -25,16 +25,17 @@ function renderQuote(quote){
     const footer = document.createElement('footer')
     footer.setAttribute('class', 'blockquote-footer')
     footer.textContent = quote.author
-    // const likeSpan = document.createElement('span')
-    // likeSpan.textContent = quote.likes
-    // should the likes be within a span? or inside the button
+    const likeSpan = document.createElement('span')
+    likeSpan.textContent = quote.likes
+     // should the likes be within a span? or inside the button
     const likeButton = document.createElement('button')
-    likeButton.setAttribute('button', 'btn-success')
-    likeButton.innerText = `Likes: ${quote.likes}`
+    likeButton.setAttribute('class', 'btn-success')
+    likeButton.innerText = `Likes: `
     likeButton.dataset.id = quote.id
     likeButton.addEventListener('click', handleLikeButton)
+   
     const dangerButton = document.createElement('button')
-    dangerButton.setAttribute('button', 'btn-danger')
+    dangerButton.setAttribute('class', 'btn-danger')
     dangerButton.innerText = "Delete"
     dangerButton.dataset.id = quote.id
     dangerButton.addEventListener('click', handleDangerButton)
@@ -43,16 +44,20 @@ function renderQuote(quote){
     quoteCard.appendChild(pTag)
     quoteCard.appendChild(footer)
     quoteCard.appendChild(likeButton)
+    likeButton.appendChild(likeSpan)
     quoteCard.appendChild(dangerButton)
 }
 
 function handleForm(e) {
     // this won't post 
-    e.target.preventDefault
-    const newQuote = e.target.elements['quote'].value
+    console.log(e.target.elements)
+    e.preventDefault()
+    const newQuote = e.target.elements['new-quote'].value
     const newAuthor = e.target.elements['author'].value
-    const newFormSubmission = {quote: newQuote, author: newAuthor}
-    renderQuote(newQuote, newAuthor)
+    const newFormSubmission = {quote: newQuote, likes: 0, author: newAuthor}
+    renderQuote(newFormSubmission)
+
+
     fetch('http://localhost:3000/quotes', {
         headers: {
             "Content-Type": "application/json",
@@ -61,31 +66,33 @@ function handleForm(e) {
             body: JSON.stringify(newFormSubmission)
     })
     .then(resp => (resp))
-    renderAllQuotes()
     e.target.reset()
 }
 
 function handleLikeButton(e) {
     // SOS can't access the LIKE number
-   let newLike = console.log(e.target.parentNode)
-   let id = console.log(e.target.dataset.id)
+   let newLike = e.target.querySelector('span').innerHTML
+   let id = e.target.dataset.id
+
+    e.target.querySelector('span').innerHTML = ++newLike
+
    let fetchBody = {
      headers: {
        "Content-Type": "application/json",
      Accept: "application/json"},
      method: 'PATCH',
-     body: `{"Likes": ${++newLike}}`
+     body: `{"likes": ${newLike}}`
    }
-   e.target.innerHTML = newLike
  
    fetch(`http://localhost:3000/quotes/${id}`, fetchBody)
           .then(resp => console.log(resp))
+          e.target.reset()
  }
 
-
  function handleDangerButton(e){
-	e.target.parentNode.remove()
-	delete(e.target.dataset.id)
+    e.target.parentNode.remove()
+    
+    deleteQuote(e.target.dataset.id)
 }
 
  function deleteQuote(id){
@@ -94,6 +101,5 @@ function handleLikeButton(e) {
 	{
 		method:'DELETE'
 	})
-	.then(resp => console.log(resp))
+	.then(resp => resp)
 }
-
